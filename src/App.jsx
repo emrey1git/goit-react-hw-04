@@ -3,6 +3,8 @@ import axios from "axios";
 import "./App.css";
 import SearchBar from "./components/SearchBar";
 import ImageModal from "./components/ImageModal";
+import Loader from "./components/Loader"; // Loader bileşeni import edildi
+import toast, { Toaster } from "react-hot-toast"; // React Hot Toast import edildi
 
 const ACCESS_KEY = "mZ-PGpbO-m46PTDt4FkEMWLL8xWIwSjkx-D0tLCLJuQ";
 
@@ -58,23 +60,21 @@ const App = () => {
     loadImages();
   }, [query, page]);
 
-  // --- Buraya scroll engelleme useEffect'i ekle ---
-
   useEffect(() => {
     if (isModalOpen) {
-      document.body.style.overflow = "hidden"; 
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = ""; 
+      document.body.style.overflow = "";
     }
 
     return () => {
-      document.body.style.overflow = ""; 
+      document.body.style.overflow = "";
     };
   }, [isModalOpen]);
 
   const handleSearchSubmit = (searchTerm) => {
     if (searchTerm.trim() === "") {
-      alert("Lütfen arama için bir kelime girin.");
+      toast.error("Lütfen arama için bir kelime girin.");
       return;
     }
     setQuery(searchTerm);
@@ -86,12 +86,11 @@ const App = () => {
   const loadMore = () => {
     setPage((prev) => prev + 1);
   };
- 
+
   const openModal = (image) => {
     setSelectedImage(image);
     setIsModalOpen(true);
   };
-
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -100,6 +99,7 @@ const App = () => {
 
   return (
     <div style={{ maxWidth: "900px", margin: "auto", padding: "20px" }}>
+      <Toaster position="top-right" /> {/* Toast bildirimleri */}
       <SearchBar onSubmit={handleSearchSubmit} />
 
       {error && <p style={{ color: "red", textAlign: "center" }}>{error}</p>}
@@ -120,13 +120,13 @@ const App = () => {
               src={img.urls.small}
               alt={img.alt_description || "Image"}
               style={{ width: "100%", borderRadius: "8px" }}
-              onClick={() => openModal(img)} 
+              onClick={() => openModal(img)}
             />
           </li>
         ))}
       </ul>
 
-      {loading && <p style={{ textAlign: "center" }}>Yükleniyor...</p>}
+      {loading && <Loader />} {/* Burada artık Loader bileşeni kullanılıyor */}
 
       {images.length > 0 && !loading && (
         <div style={{ textAlign: "center", marginTop: "20px" }}>
@@ -134,7 +134,6 @@ const App = () => {
         </div>
       )}
 
-      {/* Modal componenti */}
       <ImageModal isOpen={isModalOpen} onClose={closeModal} image={selectedImage} />
     </div>
   );
