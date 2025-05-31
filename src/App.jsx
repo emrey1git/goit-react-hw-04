@@ -3,8 +3,8 @@ import axios from "axios";
 import "./App.css";
 import SearchBar from "./components/SearchBar";
 import ImageModal from "./components/ImageModal";
-import Loader from "./components/Loader"; // Loader bileşeni import edildi
-import toast, { Toaster } from "react-hot-toast"; // React Hot Toast import edildi
+import Loader from "./components/Loader"; 
+import toast, { Toaster } from "react-hot-toast"; 
 
 const ACCESS_KEY = "mZ-PGpbO-m46PTDt4FkEMWLL8xWIwSjkx-D0tLCLJuQ";
 
